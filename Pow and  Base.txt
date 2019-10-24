@@ -1,0 +1,24 @@
+INCLUDE Irvine32.inc
+.data
+
+base BYTE 2
+pow BYTE 3
+
+
+
+.code
+main PROC
+
+xor eax, eax
+xor ebx, ebx
+mov bl, pow
+mov ecx , ebx
+mov al, 1
+L1:
+mul base
+loop L1
+call writedec
+
+exit
+main ENDP
+end main

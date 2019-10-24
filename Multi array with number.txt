@@ -1,0 +1,21 @@
+;This program multiplies each element of an array
+;of 32-bit integers by a constant value.
+INCLUDE Irvine32.inc
+.data
+array DWORD 1,2,3,4,5,6,7,8,9,10
+multiplier DWORD 20
+.code
+main PROC
+cld ;direction = forward
+mov esi,OFFSET array ;source index
+mov edi,esi ;destination index
+mov ecx,LENGTHOF array ;loop counters
+L1 : lodsd ;load [ESI] into EAX
+mul multiplier ;multiply by a value
+stosd;store EAX into [EDI]
+call writeint
+loop L1
+
+exit
+main ENDP
+END main

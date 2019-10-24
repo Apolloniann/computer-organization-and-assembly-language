@@ -1,0 +1,150 @@
+include irvine32.inc
+ 
+.data
+ 
+value_1 byte 1,5,6,3,4,9,8,10,2,7
+Maximum byte 0
+Minimum byte 0
+.code
+main proc
+xor ecx,ecx
+xor eax,eax
+xor edx,edx
+mov edx, offset value_1
+mov ecx,lengthof value_1
+ 
+call Maximum_
+mov maximum,al
+call writeint
+ 
+xor ecx,ecx
+xor eax,eax
+xor edx,edx
+mov edx, offset value_1
+mov ecx,lengthof value_1
+call minimum_
+mov minimum,al
+call writeint
+ 
+exit
+main endp
+ 
+Maximum_ proc
+mov al,[edx]
+L:
+ 
+cmp al,[edx]
+jb swap
+back_4:
+inc edx
+loop L
+jmp back
+swap:
+mov al,[edx]
+jmp back_4
+ 
+back:
+ret
+maximum_  endp
+ 
+ 
+ 
+ 
+Minimum_ proc
+mov al,[edx]
+L:
+inc edx
+cmp al,[edx]
+ja swap
+loop L
+jmp back
+swap:
+mov al,[edx]
+dec ecx
+jmp L
+ 
+back:
+ret
+minimum_  endp
+end main
+===============
+Questio No 02 c)
+================
+include irvine32.inc
+.data
+str1 byte "Enter the number: ",0
+str2 byte "Sorted Array: ",0
+myarray byte 10 dup(0)
+var dword 0
+counter byte 0
+
+.code
+main proc
+call sorting
+exit
+
+main endp
+sorting proc uses eax ebx ecx edx esi
+mov edx,offset str1
+mov ecx,lengthof myarray
+call writestring
+mov esi,0
+
+L:
+call readint
+mov [myarray+esi],al
+inc esi
+loop L
+xor eax, eax
+xor ecx, ecx
+xor edx, edx
+xor ebx, ebx
+mov esi, offset myarray
+mov ecx, lengthof myarray
+
+L1:
+mov var,ecx
+mov ecx,lengthof myarray
+mov esi, offset myarray
+dec ecx
+
+L2:
+mov al, [esi]
+inc esi
+mov bl, [esi]
+cmp bl, al
+jc swap
+back:
+loop L2
+mov ecx, var
+loop L1
+call crlf
+mov edx,offset str2
+call writestring
+mov ecx, lengthof myarray
+mov esi, offset myarray
+xor eax, eax
+mov edx, 0
+print:
+mov al, [myarray + edx]
+inc edx
+call writedec
+call crlf
+loop print
+exit
+
+swap:
+clc
+xchg al, bl
+mov[esi], bl
+dec esi
+mov[esi], al
+inc esi
+jmp back
+ret
+sorting endp
+exit
+main ENDP
+end main
+
+

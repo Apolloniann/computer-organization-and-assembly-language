@@ -1,0 +1,42 @@
+INCLUDE Irvine32.inc
+.data
+arr BYTE  1,2,3,4,5
+prpt BYTE "Please Enter a Number you want to search",0
+prpt1 BYTE"Element Found",0
+prpt2 BYTE"Element Not Found",0
+.code 
+main proc
+
+mov edx,OFFSET prpt
+call writestring 
+call crlf
+call readint
+
+call crlf
+
+
+mov ecx,SIZEOF arr
+
+
+
+l1:
+cmp arr[ecx],al
+
+je found
+jcxz notfound
+loop l1
+jmp ex
+found:
+mov edx,offset prpt1
+call writestring
+call crlf
+jmp ex
+notfound:
+mov edx,offset prpt2
+call writestring
+call crlf
+ex:
+exit
+main endp
+end main
+

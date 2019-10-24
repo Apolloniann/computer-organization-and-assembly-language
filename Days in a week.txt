@@ -1,0 +1,108 @@
+include irvine32.inc
+
+.data
+
+var1 byte 0
+
+str1 byte "Enter the Day Number ",0
+day1 byte "Monday",0
+day2 byte "Tuesday",0
+day3 byte "Wednesday",0
+day4 byte "Thursday",0
+day5 byte "Friday",0
+day6 byte "Saturday",0
+day7 byte "Sunday",0
+
+
+.code
+main proc
+
+xor eax,eax
+mov edx,offset str1
+call writestring
+call readint
+
+cmp al,1
+je L1
+
+cmp al,2
+je L2
+
+cmp al,3
+je L3
+
+cmp al,4
+je L4
+
+cmp al,5
+je L5
+
+cmp al,6
+je L6
+
+cmp al,7
+je L7
+
+exit
+
+L1:
+call crlf
+mov  edx,offset day1
+call writestring
+call crlf
+jmp exzt
+
+L2:
+call crlf
+mov  edx, offset day2
+call writestring
+call crlf
+jmp exzt
+
+
+L3:
+call crlf
+mov  edx, offset day3
+call writestring
+call crlf
+jmp exzt
+
+
+
+L4:
+call crlf
+mov  edx, offset day4
+call writestring
+call crlf
+jmp exzt
+
+
+L5:
+call crlf
+mov  edx, offset day5
+call writestring
+call crlf
+jmp exzt
+
+
+L6:
+call crlf
+mov  edx, offset day6
+call writestring
+call crlf
+jmp exzt
+
+
+L7:
+call crlf
+mov edx, offset day7
+call writestring
+call crlf
+jmp exzt
+
+
+exzt:
+exit
+
+main endp
+end main

@@ -1,0 +1,41 @@
+; copy this code into .data section
+Msg1 BYTE "for 32 - bit registers",0
+; copy this code into main procedure
+; 32 - bit registers
+mov edx,OFFSET Msg1
+call WriteString
+call Crlf
+XOR EAX,EAX
+XOR EBX,EBX
+XOR ECX,ECX
+XOR EDX,EDX
+call DumpRegs
+pushad
+mov eax,12345678h
+mov ebx,5678h
+mov ecx,1234h
+mov edx,1359h
+call DumpRegs
+popad
+call DumpRegs
+----
+copy this code into .data section as variable declaration section
+Msg2 BYTE "for 16 - bit registers",0
+; copy this code into main procedure
+;16 - bit registers
+mov edx,OFFSET Msg2
+call WriteString
+call Crlf
+XOR EAX,EAX
+XOR EBX,EBX
+XOR ECX,ECX
+XOR EDX,EDX
+call DumpRegs
+pusha
+mov ax,1234h
+mov bx,5678h
+mov cx,1357h
+mov dx,2468h
+call DumpRegs
+popa
+call DumpRegs

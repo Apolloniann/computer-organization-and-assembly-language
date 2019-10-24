@@ -1,0 +1,33 @@
+Include Irvine32.inc
+
+Macc MACRO char
+mov eax,char
+call writechar
+call crlf
+ENDM
+
+
+Mac1 MACRO varName, size
+mov edx,OFFSET varName
+mov ecx, size
+call ReadString
+mov edx,OFFSET varName
+mov ecx, size
+call writestring
+pop edx
+pop ecx
+ENDM
+
+.data
+
+msg byte ?
+
+.code
+main PROc
+
+Macc 'A'
+Mac1 msg,10
+
+exit
+main ENDP
+end main

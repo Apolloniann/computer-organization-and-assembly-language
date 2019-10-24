@@ -1,0 +1,28 @@
+Include Irvine32.inc
+
+BASEBALL STRUCT
+NAME1 BYTE 20 DUP (0)
+
+BASEBALL ENDS
+
+.data
+
+obj BASEBALL <" ">
+
+.code
+main PROC
+mov edx,offset obj.NAME1
+mov ecx,lengthof obj.NAME1
+call readstring
+call crlf
+
+mov edx,offset obj.NAME1
+mov ecx,lengthof obj.NAME1
+call writestring
+call crlf
+
+
+
+exit
+main ENDP
+end main

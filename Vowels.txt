@@ -1,0 +1,200 @@
+
+
+include irvine32.inc
+
+.data
+
+str1 byte "Politicians are one kind of gamers, playing with people",0
+
+vowala byte 0
+vowale byte 0
+vowali byte 0
+vowalo byte 0
+vowalu byte 0
+temp byte 0
+
+
+arr byte 5 dup(0)
+
+
+
+.code
+main proc
+
+mov esi,0
+mov ecx,lengthof str1
+
+xor eax,eax
+
+L:
+
+mov al,str1[esi]
+
+cmp al,'a'
+je L1
+
+cmp al,'e'
+je L2
+
+cmp al,'i'
+je L3
+
+cmp al,'o'
+je L4
+
+cmp al,'u'
+je L5
+
+inc esi
+loop L
+
+
+
+mov ecx,lengthof arr
+mov esi,0
+
+
+mov al,vowala
+mov arr[esi],al
+inc esi
+mov al,vowale
+mov arr[esi],al
+inc esi
+mov al,vowali
+mov arr[esi],al
+inc esi
+mov al,vowalo
+mov arr[esi],al
+inc esi
+mov al,vowalu
+mov arr[esi],al
+
+mov esi,0
+mov ecx,lengthof arr
+
+xor eax,eax
+
+mov al,arr[esi]
+mov temp,al
+
+lo:
+
+cmp al,arr[esi+1]
+jb lo1
+inc esi
+
+loop lo
+
+
+mov al,temp
+
+cmp al,vowala
+je p1
+
+
+cmp al,vowale
+je p2
+
+cmp al,vowali
+je p3
+
+cmp al,vowalo
+je p4
+
+cmp al,vowalu
+je p5
+
+
+
+
+
+p1:
+
+mov al,'a'
+call writechar
+mov al,temp
+call writedec
+jmp exzt
+
+
+p2:
+
+mov al,'e'
+call writechar
+mov al,temp
+call writedec
+jmp exzt
+
+
+p3:
+
+mov al,'i'
+call writechar
+mov al,temp
+call writedec
+jmp exzt
+
+p4:
+
+mov al,'o'
+call writechar
+mov al,temp
+call writedec
+jmp exzt
+
+p5:
+
+mov al,'u'
+call writechar
+mov al,temp
+call writedec
+jmp exzt
+
+exzt:
+exit
+
+lo1:
+
+mov al,arr[esi+1]
+mov temp,al
+inc esi
+jmp lo
+
+
+
+
+
+
+L1:
+inc vowala
+inc esi
+jmp L
+
+L2:
+inc vowale
+inc esi
+jmp L
+
+L3:
+inc vowali
+inc esi
+jmp L
+
+L4:
+inc vowalo
+inc esi
+jmp L
+
+L5:
+inc vowalu
+inc esi
+jmp L
+
+
+
+
+
+
+exit
+main endp
+end main

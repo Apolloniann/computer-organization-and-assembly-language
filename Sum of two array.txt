@@ -1,0 +1,38 @@
+include irvine32.inc
+.data
+Array_a dword 1,2,3,4,5
+Array_b dword 6,7,8,9,10
+Array_c dword ?
+
+.code
+main proc
+	xor eax,eax
+	xor ecx,ecx
+	xor edx,edx
+	xor ebx,ebx
+	xor edi,edi
+
+	mov esi,offset Array_a
+	mov edi,offset Array_b
+	mov ebx, offset Array_c
+	mov ecx,5
+	call Array_sum
+	L2:
+	mov al,[ebx]
+	call writeint
+	add ebx,4
+	loop L2
+exit
+main endp
+Array_sum proc uses ebx edi esi ecx   
+ L1:
+ 	mov al,[esi]
+ 	add al,[edi]
+ 	add esi,4
+ 	add edi,4
+ 	mov [ebx],al
+ 	add ebx,4
+ 	loop L1
+ 	ret
+Array_sum endp
+end main

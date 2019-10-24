@@ -1,0 +1,67 @@
+include irvine32.inc
+
+.data
+
+arr_ay byte 1,2,3,4,5,6,7,8,9,10
+found byte "Key is found:",0
+msg byte "Not found:",0
+str1 byte "Enter Number: ",0
+
+val dword ?
+val_1 dword ?
+key byte ?
+
+.code
+main PROC
+mov edx,offset str1
+call writestring
+mov ESI,0
+mov EDI,lengthof  arr_ay
+
+
+call readint
+
+.if AL>arr_ay[EDI]||AL<arr_ay[ESI]
+mov EDX,offset msg
+call writestring
+jmp exit_
+.endif
+mov key,AL
+call Binary_search
+exit_:
+exit
+main ENDP
+
+Binary_search proc
+
+L:
+mov val,ESI
+mov val_1,EDI
+add ESI,EDI
+mov EAX,ESI
+mov EBX,2
+xor EDX,EDX
+div EBX
+mov EBX,EAX
+mov AL,arr_ay[EBX]
+
+.if key==AL
+mov EDX,offset found
+call writestring
+jmp exit_
+.endif
+.if AL>key
+mov ESI,val
+mov EDI,EBX
+jmp L
+.endif
+.if AL<key
+mov ESI,EBX
+mov EDI,val_1
+jmp L
+.endif
+
+exit_:
+ret
+Binary_search endp
+end main

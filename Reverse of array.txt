@@ -1,0 +1,30 @@
+;reverse
+
+ 
+
+include irvine32.inc
+
+.data 
+array_d byte 1,2,3,4,5,6,7,8,9
+str1 byte "  ",0
+sum byte ?
+.code 
+main proc
+
+mov ecx,lengthof array_d
+mov esi,offset array_d+lengthof array_d
+mov eax,0
+
+l1:
+
+mov al,[esi-1]
+dec esi
+call writedec
+mov edx, offset str1
+call writestring
+loop l1
+
+call crlf
+exit
+main endp
+end main

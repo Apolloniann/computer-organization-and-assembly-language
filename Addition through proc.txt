@@ -1,0 +1,18 @@
+INCLUDE Irvine32.inc;
+.data
+.code
+main PROC
+mov eax,12d
+mov ebx,228d
+mov ecx,10d
+call sum
+call WriteInt
+call Crlf
+exit
+main ENDP
+sum proc
+add eax,ebx
+add eax,ecx
+ret
+sum endp
+END main

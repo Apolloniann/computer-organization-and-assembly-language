@@ -1,0 +1,100 @@
+include irvine32.inc
+
+.data 
+
+
+str1 byte "Enter the first array: ",0
+str2 byte "Enter the second array: ",0
+str3 byte "Sum of array is: ",0
+
+myarray byte 5 dup(0)
+myarray2 byte 5 dup(0)
+myarray3 byte 5 dup(0)
+
+
+
+.code 
+
+main proc
+
+
+call arraysum
+
+
+exit
+main endp
+
+
+arraysum proc uses eax ebx ecx edx
+
+xor eax,eax
+xor ecx,ecx
+xor ebx,ebx
+	
+mov edx,offset str1
+call writestring
+mov esi,0	
+
+mov ecx,lengthof myarray
+	
+L:
+
+call readint
+mov [myarray+esi],al
+inc esi
+
+loop L
+	
+	
+mov edx,offset str2
+call writestring
+mov esi,0	
+
+mov ecx,lengthof myarray
+	
+L2:
+
+call readint
+mov [myarray2+esi],al
+inc esi
+
+loop L2	
+
+mov ecx,lengthof myarray
+mov esi,0
+xor eax,eax
+L3:
+
+mov al,[myarray+esi]
+add [myarray3+esi],al
+mov al,[myarray2+esi]
+add [myarray3+esi],al
+
+inc esi
+
+loop L3
+
+mov edx,offset str3
+call writestring
+
+mov ecx,lengthof myarray
+mov esi,0
+call crlf
+xor eax,eax
+L4:
+
+
+
+mov al,[myarray3+esi]
+call writedec
+call crlf
+inc esi
+
+loop L4
+
+call crlf
+ret
+
+arraysum endp
+
+end main

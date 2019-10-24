@@ -1,0 +1,99 @@
+include irvine32.inc
+.data 
+	str1 BYTE "                  ***Encryption and Dycryption Program***  ",0
+	str2 BYTE "ENCRYPT: ",0
+	str3 BYTE "DESCRYPT: ",0 
+	array BYTE "Moazzam",0
+	key BYTE  -2, 4, 1, 0, -3, 5, 2, -4, -4, 6
+
+.code 
+main PROC
+
+
+
+
+;encrypt
+
+mov EDI,0
+mov ESI,0
+
+
+
+mov ecx,lengthof array-1
+
+
+
+L1:
+
+	.IF EDI < 10
+		.IF key[EDI]<0
+  
+		   mov cl,key[EDI]
+	 	   ROl array[ESI],cl
+		  .elseif key[EDI]>=0
+		   mov al,key[EDI]
+		   ror array[ESI],cl
+		   .endif
+	.else
+	 mov EDI ,0
+	
+	.endif
+ 	inc ESI
+ 	inc EDI
+
+	
+	Loop L1
+	mov EDX,offset str1
+	call writestring
+	call crlf
+	call crlf
+	mov EDX,offset str2
+	call writestring
+	mov EDX,offset array
+	call writestring
+
+	call crlf
+	
+;Dycrpt
+call crlf
+	call waitmsg
+
+mov ESI,0
+mov EDI,0
+
+mov EDX, offset str3
+call writestring
+
+mov ECX,lengthof array-1
+
+L2:
+
+	.if EDI < 10
+		.if key[EDI]<0
+  
+		   mov CL,key[EDI]
+		   ROR array[EDI],CL
+		  .elseif key[EDI]>=0
+		   mov AL,key[EDI]
+		   ROL array[ESI],CL
+		   .endif
+	.else
+	 mov EDI ,0
+	
+	.endif
+ 	inc ESI
+ 	inc EDI
+
+	
+	loop L2
+
+	mov EDX,offset array
+	call writestring
+	call crlf
+	call Dumpregs
+	call crlf
+	call crlf
+
+EXIT
+main ENDP
+END main

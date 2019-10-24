@@ -1,0 +1,58 @@
+include irvine32.inc
+
+.data 
+
+str_1 byte "Enter first number: ",0
+str_2 byte "Enter Second power: ",0
+
+
+
+.code 
+
+main proc
+
+
+call swap 
+
+
+exit
+main endp
+
+
+swap proc uses eax ebx ecx edx
+
+xor eax,eax
+xor ecx,ecx
+xor ebx,ebx
+	
+	
+	mov edx,offset str_1
+	call writestring
+	call readint
+        call crlf
+	mov ebx,eax
+	
+	mov edx,offset str_2
+	call writestring
+	call readint
+	
+	call dumpregs
+
+	
+	mov ecx,eax
+	mov eax,ebx
+	mov ebx,ecx
+	
+	call dumpregs
+	
+	
+
+
+call crlf
+ret
+
+swap endp
+
+end main
+
+

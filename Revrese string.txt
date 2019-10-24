@@ -1,0 +1,39 @@
+INCLUDE Irvine32.inc;
+.data
+Msg1 BYTE "steps on no pets",0
+.code
+main PROC
+mov edx,OFFSET Msg1
+call WriteString
+call Crlf
+call Crlf
+
+call Crlf
+mov ecx,lengthof Msg1
+dec ecx 
+mov esi,0
+Labl1:
+movzx eax,Msg1[esi] 
+
+push eax
+inc esi
+loop Labl1
+XOR ESI,ESI
+mov ecx,lengthof Msg1
+dec ecx
+
+Labl2:
+pop eax
+mov Msg1[esi],al
+inc esi
+loop Labl2
+
+mov edx,OFFSET Msg1
+call WriteString
+call Crlf
+call Crlf
+call Crlf
+call Crlf
+exit
+main ENDP
+END main

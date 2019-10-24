@@ -1,0 +1,89 @@
+include irvine32.inc
+.data
+
+str1 byte "Even",0
+str2 byte "odd",0
+str3 byte "Enter Number: ",0
+
+str_1 byte "Number of digits:",0
+str_2 byte "Sum of even:",0
+str_3 byte "Maximum is:",0
+
+counter byte 0
+divi byte 2
+sum byte 0
+num dword 0
+
+.code
+main PROC
+xor EAX,EAX
+mov edx, offset str3
+call writestring
+call readint
+push EAX
+
+mov CL,2
+div CL
+
+.if AH==0
+	mov EDX,offset str1
+	call writestring
+	JMP next
+.endif
+mov EDX,offset str2
+call writestring
+next:
+pop EAX
+call crlf
+mov EDX,0
+mov BL,10
+mov ESI,0
+mov ECX,0
+mov EDI,1
+
+L_1:
+	.if AL==0
+	jmp exit_1
+	.endif
+	div BL
+	push EAX
+	movzx ECX,AH
+	movzx EAX,AH
+	.if EAX>EDI
+	mov EDI,EAX
+	.endif
+	div divi
+	.if AH==0
+	add ESI,ECX
+	.endif
+	pop EAX
+	movzx AX,AL
+	
+	inc counter
+	jmp L_1
+  call dumpregs
+
+exit_1:
+
+xor EAX,EAX
+movzx EAX,counter
+mov EDX,offset str_1
+call writestring
+call writedec
+call crlf
+
+mov EAX,ESI
+mov EDX,offset str_2
+call writestring
+call writedec
+call crlf
+
+mov EDX,offset str_3
+call writestring
+mov EAX,EDI
+call writedec
+call crlf
+
+exit
+main ENDP
+end main

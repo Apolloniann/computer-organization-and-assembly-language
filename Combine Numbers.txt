@@ -1,0 +1,23 @@
+include irvine32.inc
+
+.data
+myBytes BYTE 21h,43h
+myBytes2 word 8765h
+
+line byte "Combined Number is: ",0
+
+.code
+main PROC
+mov ax,WORD PTR [myBytes]		
+mov ax,WORD PTR [myBytes2]		
+mov eax,DWORD PTR myBytes
+mov edx,offset line
+call writestring
+call writehex
+call crlf
+
+
+EXIT
+main ENDP
+end main
+

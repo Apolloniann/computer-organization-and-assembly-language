@@ -1,0 +1,53 @@
+TITLE Showing the Time (ShowTime.ASM)
+; This program locates the cursor and displays the
+; system time. It two MS-Windows structures.
+INCLUDE Irvine32.inc
+Comment @
+Definitions copied from Irvine32.inc (SmallWin.inc):
+COORD STRUCT
+X WORD ?
+Y WORD ?
+COORD ENDS
+SYSTEMTIME STRUCT
+wYear WORD ?
+wMonth WORD ?
+wDayOfWeek WORD ?
+
+wDay WORD ?
+wHour WORD ?
+wMinute WORD ?
+wSecond WORD ?
+wMilliseconds WORD ?
+SYSTEMTIME ENDS
+---------------------------------------- @
+.data
+X = 10
+Y = 5
+sysTime SYSTEMTIME <>
+consoleHandle DWORD ?
+colonStr BYTE ":",0
+TheTimeIs BYTE "The time is ",0
+.code
+main PROC
+mov dh, Y
+mov dl, X
+call Gotoxy
+INVOKE GetLocalTime,ADDR sysTime
+mov edx,OFFSET TheTimeIs ; "The time is "
+call WriteString
+; Display the system time (hh:mm:ss).
+movzx eax,sysTime.wHour ; hours
+call WriteDec
+mov edx,offset colonStr ; ":"
+call WriteString
+movzx eax,sysTime.wMinute ; minutes
+call WriteDec
+mov edx,offset colonStr ; ":"
+call WriteString
+movzx eax,sysTime.wSecond ; seconds
+call WriteDec
+call Crlf
+call Crlf
+exit
+main ENDP
+END main

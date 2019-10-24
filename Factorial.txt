@@ -1,0 +1,71 @@
+include irvine32.inc
+.data 
+.code 
+main proc
+call fact 
+exit
+main endp
+
+
+fact proc uses eax ecx esi
+
+xor eax,eax
+xor ecx,ecx
+xor esi,esi
+
+
+call readint
+mov ecx,eax
+mov esi,1
+mov eax,1
+
+
+L:
+
+mul esi
+
+inc esi
+
+
+loop L
+
+
+call writedec
+call crlf
+ret
+
+fact endp
+
+end main
+=======================================
+
+
+;simple
+include irvine32.inc
+.data 
+.code 
+main proc
+
+xor eax,eax
+xor ecx,ecx
+xor esi,esi
+
+call readint
+mov ecx,eax
+mov esi,1
+mov eax,1
+
+
+L:
+
+mul esi
+inc esi
+loop L
+
+
+call writedec
+call crlf
+
+exit
+main endp
+end main

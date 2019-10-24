@@ -1,0 +1,29 @@
+include irvine32.inc
+.data
+	str1 byte "Enter Length: ",0
+	str2 byte "*",0
+	len dword ?	
+.code
+main PROC
+	mov edx, offset str1
+	call writestring
+	call readint
+	mov len, eax
+	call shape
+	call crlf
+exit
+main ENDP
+shape PROC
+	mov ecx, len
+	mov edx, offset str2
+	L1:
+	push ecx
+		L2:	
+		call writestring
+		loop L2
+		call crlf
+	pop ecx
+	loop L1
+	ret
+shape ENDP
+END main

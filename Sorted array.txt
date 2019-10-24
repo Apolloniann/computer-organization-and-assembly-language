@@ -1,0 +1,70 @@
+include irvine32.inc
+.data
+array_ byte 10,11,12,13,17,15,18,19
+Msg byte "Sorted Array is:" ,0
+size_ dword 0
+counter byte 0
+
+.code
+main proc
+
+mov edx,offset Msg
+call writeString
+call crlf
+	xor eax, eax
+	xor ecx, ecx
+	xor edx, edx
+	xor ebx, ebx
+	mov esi, offset array_
+	mov ecx, lengthof array_
+
+	call Sort
+
+
+
+		mov edx, 0
+		xor eax,eax
+			
+     print:
+		
+		mov al, [array_ + edx]
+		inc edx
+		call writeint
+		call crlf
+		loop print
+exit
+main endp
+Sort  proc uses esi ecx
+
+
+	Lp1:
+
+		mov size_,ecx
+		mov ecx,lengthof array_
+		mov esi, offset array_
+		dec ecx
+	Lp2:
+		mov al, [esi]
+		inc esi
+		mov bl, [esi]
+		cmp bl, al
+		jc swap
+	back: 
+		loop Lp2
+		mov ecx, size_
+		loop Lp1
+		ret
+
+
+	swap:
+		clc
+		xchg al, bl
+		mov[esi], bl
+		dec esi
+		mov[esi], al
+		inc esi
+		jmp back
+
+
+Sort endp
+end main

@@ -1,0 +1,300 @@
+include irvine32.inc
+
+Buffer = 1000
+BUFFER_User = 500
+SIZE_ = 16
+COORD struct
+
+x word ?
+y word ?
+COORD ends
+.data
+cursor_position COORD <>
+
+Buffer_size byte Buffer dup(0)
+user_name byte 20 dup(0);for quiz
+id_number byte 20 dup(0);for quiz
+Msg_next byte "To take another Quiz Press 'C'",0
+Msg_id byte "Enter the ID:", 0, 0ah
+Msg_start byte "Quiz is start Now You had Ten minutes to complete it:", 0
+Msg_n byte "Name:", 0
+Msg_i byte "ID:", 0
+Msg_r byte "Your score is:", 0
+Msg_r1 byte "Your Type answer:", 0
+output_file byte "output_1.txt"
+out_handle_1 dword ?
+Question_file byte "Question.txt"
+Question_handle dword ?
+Point_x byte ?
+Point_y byte ?
+gotoxy_handle dword ?
+Bytes_written word ?
+count dword 0
+answer dword 0
+char byte  0
+answer_book byte 0
+end_message byte "The end:", 0
+marks dword 0
+cordinates dword 0
+
+.code
+main proc
+
+
+xor esi, esi
+xor edi, edi
+;;;
+mov esi, offset answer_book
+mov edx, offset output_file
+call create_Write_File
+mov out_handle_1, eax;
+;;;
+mov edx, offset Question_file
+call open_file_Read_mode
+mov Question_handle, eax
+mov edx, offset Buffer_size
+mov ecx, Buffer
+call Read_from_file
+L:
+	mov bl, 50
+	mov bh, 10
+	call move
+
+	call crlf
+
+	add bh, 2
+	call move
+	mov edx,offset Msg_n
+	call writestring
+	add bh, 1
+	call move
+	mov edx,offset user_name
+	mov ecx,lengthof user_name
+	call readstring
+	mov eax, out_handle_1
+	call write_on_file
+
+	add bh,2
+	call move
+	mov edx, offset Msg_id
+	call writestring
+	
+	add bh, 1
+	call move
+	mov edx, offset id_number
+	mov ecx, lengthof id_number
+	call readstring
+	mov eax, out_handle_1
+	call write_on_file
+	call Clrscr
+
+
+	call crlf
+	mov bl, 48
+	mov bh, 8
+	call move
+
+
+	mov count, 0
+	mov answer, 0
+	mov esi, offset answer_book
+	mov marks, 0
+
+
+    call Quiz_start
+	call clrscr
+	push ebx
+	mov bh, 6
+	mov bl, 50
+	call clrscr
+	mov eax, ebp
+	mov marks, eax
+	call result
+	;mov al, marks_
+	;call writeint
+	
+	mov eax,out_handle_1
+	
+	mov edx,  marks
+	mov ecx,0
+	call write_on_file
+	call crlf
+	mov edx,offset Msg_next
+	call writestring
+	xor eax,eax
+	call crlf
+	call readchar
+	.if al=='c'
+	call clrscr
+	jmp L
+	.endif
+
+
+exit
+main endp
+
+check proc
+	mov ecx, buffer
+	xor edx, edx
+	mov edx, offset Buffer_size
+L :
+	mov al, [edx]
+	inc edx
+	call writechar
+	loop l
+	ret
+	check endp
+Quiz_start proc
+
+
+mov edi, offset buffer_size
+;call writestring
+
+Begining:
+	mov cordinates, ebx
+	add bh, 2
+	call move
+	call message
+	add bh, 2
+	call move
+
+
+	mov ecx, buffer
+	xor eax, eax
+start :
+	mov al, [edi]
+	call writechar
+	inc edi
+	cmp al, 10
+	je counter
+back :
+	cmp count, 5
+	je Ans
+
+	loop start
+
+counter :
+	inc count
+	add bh, 2
+	call move
+	jmp back
+Ans :
+
+	mov count, 0
+	add bh, 2
+	call move
+	call readchar
+	mov[esi], al
+	mov al, [edi]
+	cmp al, [esi]
+	je score_
+	M_b :
+	add edi, 3
+	add esi, 1
+	inc answer
+	cmp answer, 10
+	je stop
+	call Clrscr
+	mov ebx, cordinates
+	jmp begining
+	call writeint
+	score_ :
+	add marks, 1
+	mov ebp, marks
+	;mov, marks
+	;call writeint
+	;call waitmsg
+	jmp M_B
+	stop :
+	call clrscr
+	call move
+	xor edx, edx
+;mov edx, offset end_message
+;call writestring
+;call waitmsg
+	mov al, 0
+	mov[esi], al
+	xor eax, eax
+ret
+Quiz_start endp
+
+message proc
+	mov edx, offset Msg_start
+	call writestring
+	ret
+	message endp
+
+move proc
+	INVOKE GetStdHandle, STD_OUTPUT_HANDLE
+	mov gotoxy_handle, eax
+	movzx ax, bl
+	mov cursor_position.x, ax
+	movzx ax, bh
+	mov cursor_position.y, ax
+	invoke SetConsoleCursorPosition, gotoxy_handle, cursor_position
+	ret
+	move endp
+open_file_Read_mode proc
+
+	INVOKE CREATEFILE, edx, GENERIC_READ, DO_NOT_SHARE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0
+
+	ret
+open_file_Read_mode endp
+
+Read_from_file proc
+
+
+	INVOKE READFILE,
+	eax,
+	edx,
+	ecx,
+	Addr Bytes_Written,
+	0
+	ret
+Read_from_file endp
+create_Write_File Proc
+
+	INVOKE CreateFile,
+	edx, GENERIC_WRITE, DO_NOT_SHARE, NULL,
+	OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0
+
+	ret
+create_Write_File endp
+
+Write_on_file proc
+
+
+	INVOKE writefile, eax, edx, ecx, Addr Bytes_written, 0
+	INVOKE SetFilePointer, eax, 0, 0, FILE_END
+	ret
+Write_on_file endp
+
+Result Proc
+
+	call move
+	mov edx, offset Msg_n
+	call writestring
+	mov edx, offset user_name
+	call writestring	
+	add bh, 2
+	call move
+	mov edx, offset Msg_i
+	call writestring
+	mov edx, offset id_number
+	call writestring
+	add bh, 2
+	call move
+	mov edx, offset Msg_r
+	call writestring
+	xor eax, eax
+	mov eax, marks
+	call writeint
+	add bh, 2
+	call move
+	mov edx, offset Msg_r1
+	call writestring
+	mov edx, offset answer_book
+	call writestring
+	ret
+	Result endp
+end main

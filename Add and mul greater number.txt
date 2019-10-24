@@ -1,0 +1,201 @@
+===================
+Adding Greater Numer:
+====================
+include irvine32.inc
+
+.data
+
+Num byte 'AABBBBCCCCDDDDEEFFFF'
+str1 BYTE "Number is: ",0
+actual_number byte 21 dup(0)
+
+.code
+
+main PROC
+	mov EBX, 16
+	xor EAX, EAX
+	xor EDX, EDX
+	xor ESI, ESI
+	xor EDI, EDI
+	mov ECX, lengthof Num
+	mov ESI, offset Num
+	add ESI, 19
+	mov EDI, offset actual_number
+	add EDI, 20
+	mov ECX, lengthof Num
+	mov EDX,offset str1
+	call writestring
+	call crlf
+
+L1 :
+	mov AL, [ESI]
+	sub AL, 55
+	add AL, al
+	add AL, dl
+	
+	mov EDX, 0
+	div EBX
+	mov[EDI], DL
+	mov DL, 1
+	dec ESI
+	dec EDI
+	
+	loop L1
+	mov[EDI], AL
+	mov ECX, 21
+	xor ESI, ESI
+	mov ESI, offset actual_number
+	L2 :
+	mov AL, [ESI]
+	
+	INC ESI
+	call writedec   ; consider two numbers
+	Loop L2
+	call crlf
+
+
+EXIT
+main ENDP
+end main
+
+
+===============
+Multiply Greater Number:
+================
+include irvine32.inc
+
+.data
+Num_MUL byte 'AABBBBCCCCDDDDEEFFFF'
+actual_number byte 19 dup(0)
+
+Huge_number byte 361 dup(0)
+
+column_no byte 0
+Row_no byte 0
+temp dword 0
+Row_size byte 19
+temp_1 byte 0
+counter dword 0
+value_2 dword 0
+
+.code
+main PROC
+
+
+mov EBP, 16
+xor EAX, EAX
+
+mov ECX, 19
+mov EDX, 0
+L1:
+
+mov AL, Num_MUL[ECX - 1]
+sub AL, 55
+mov actual_number[EDX], al
+inc EDX
+
+Loop L1
+
+xor EAX, EAX
+xor EDX, EDX
+xor ECX, ECX
+xor EBX, EBX
+
+xor ESI, ESI
+xor EDI, EDI
+mov ECX, 19
+mov counter, 0
+mov EDI, 0
+
+L2:
+
+mov temp, EDI
+mov counter, ECX
+mov ECX, 19
+
+
+mov EBX, offset Huge_number
+mov al, Row_size;mov row sie
+
+mul Row_no        ;multiply with row number
+add EBX, EAX     ;add in ebx register
+movzx EAX, [actual_number + edi]
+inc EDI
+inc Row_no
+mov column_no, 0
+
+L3:
+mov EDI, EAX
+MOVZX ESI, column_no
+mul actual_number[ESI]
+
+add AL, temp_1
+div EBP
+mov[EBX + ESI], EDX
+
+mov temp_1, AL
+inc column_no
+mov EDX, 0
+mov EAX, edi
+
+loop L3
+
+mov ECX, counter
+inc temp
+mov EDI, temp
+loop L2
+
+xor EAX, EAX
+xor EBX, EBX
+xor EDI, EDI
+mov EBP, 0
+mov counter, 2
+mov ECX, 18
+
+mov EDI, 1
+
+L4:
+mov temp, ECX
+mov ECX, counter
+
+
+xor EAX, EAX
+
+L5 :
+add EBP, value_2
+mov AL, Row_size
+mul ECX
+add EBX, EAX
+mov ESI, counter - 1
+MOVZX EDX, [Huge_number + ebx + esi]
+add EBP, EDX
+xor EAX, EAX
+xor EBX, EBX
+loop L5
+mov EDX, 0
+xor ECX, ECX
+mov ECX, 10
+div ECX
+
+mov[actual_number + EDI], DL
+mov value_2, EAX
+
+mov ECX, temp
+inc counter
+loop L4
+xor EAX, EAX
+xor EBX, EBX
+movzx EAX, [Huge_number]
+mov EBX, offset actual_number
+mov[EBX], EAX
+
+
+mov ECX, 19
+L6:
+mov AL, [actual_number + ECX]
+call writeint
+loop L6
+
+exit
+main ENDP
+end main

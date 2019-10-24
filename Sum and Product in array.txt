@@ -1,0 +1,60 @@
+; Addition of Array 
+
+include irvine32.inc
+
+.data 
+array_d byte 1,2,3,4,5,6,7,8,9,10
+var byte ?
+.code 
+main proc
+
+mov ecx,lengthof array_d
+mov esi,offset array_d
+mov eax,0
+
+l1:
+
+add al,[esi]
+;add esi, TYPE array_d
+inc esi
+
+loop l1
+
+call writeint
+call crlf
+
+exit
+main endp
+end main
+
+; Multiplication  of Array 
+
+include irvine32.inc
+
+.data 
+array_d byte 1,2,3,4
+sum byte ?
+.code 
+main proc
+
+mov ecx,lengthof array_d
+mov esi,offset array_d
+mov eax,0
+
+l1:
+
+mov al,[esi]
+mov sum,al
+mov bl,sum
+mul bl
+
+inc esi
+
+loop l1
+
+call writeint
+call crlf
+
+exit
+main endp
+end main
